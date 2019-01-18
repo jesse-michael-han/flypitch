@@ -50,14 +50,13 @@ set_option trace.check true
   | n k 0 v (bd_var x) := sorry
   | n k l v (bd_func f) := sorry
   | _ _ _ _ _ := sorry
-end
 
 @[simp]lemma lift_realize_formula {n : ℕ} {k : ℕ} { l : ℕ}{L : Language} {S : Structure L}  { v : dvector ↥S (n+1)} { u : dvector ↥S l}: ∀ {f : bounded_preformula L n l}, realize_bounded_formula v ( f ↑' 1 # k) u = realize_bounded_formula (dvector.remove_mth k v) f u :=
 begin
   intros f,
   induction f,
   simp*,
-  simp [lift_bounded_formula_at], sorry
+  simp [lift_bounded_formula_at], repeat {sorry}
 end
 
 @[simp]lemma Set'_realize_subset_2 : ∀ x y : Set, @realize_bounded_formula L_ZFC Set' 2 0 (x :: y :: dvector.nil) subset  dvector.nil  = Set.subset x y:=
@@ -95,7 +94,7 @@ end
 
 lemma Set'_models_choice : axiom_of_choice ∈ Th Set' :=
 begin
-  dsimp[Th, axiom_of_choice, fn_domain],
+  dsimp[Th, axiom_of_choice, fn_domain], sorry
 end
 
 lemma Set'_models_infinity : axiom_of_infinity ∈ Th Set' :=

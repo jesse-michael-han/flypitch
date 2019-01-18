@@ -87,14 +87,16 @@ by {convert ψ, apply zero_add}
 @[simp]lemma bd_alls'_substmax {L} {n} {f : bounded_formula L (n+1)} {t : closed_term L} : (bd_alls' n 1 (f.cast_eq (by simp)))[t /0] = (bd_alls' n 0 (substmax_bounded_formula (f.cast_eq (by simp)) t)) := by {induction n, {tidy}, have := @n_ih (∀' f), simp[bounded_preformula.cast_eq] at *, exact this}
 
 
+set_option pp.notation false
 lemma realize_sentence_bd_alls {L} {n} {f : bounded_formula L n} {S : Structure L} : S ⊨ (bd_alls n f) ↔ (∀ xs : dvector S n, realize_bounded_formula xs f []) :=
 begin
   induction n,
     {tidy, convert a, apply dvector.zero_eq},
     {have := @n_ih (∀' f), simp[alls'_alls, alls'_all_commute] at this,
      cases this with this_mp this_mpr, split,
-     intros H xs, cases xs, apply this_mp (by {convert H, tidy}),
-     intro H, convert this_mpr (by {intros xs x, exact H (x :: xs)}), tidy}
+     intros H xs, cases xs, apply this_mp,
+     sorry, --{convert H, tidy},
+     intro H, sorry } -- convert this_mpr (by {intros xs x, exact H (x :: xs)}), tidy
 end
 
 @[simp] lemma alls_0 {L : Language} (ψ : formula L) : alls 0 ψ = ψ := by refl
@@ -274,12 +276,12 @@ lemma shallow_induction (P : set nat) : (P(0) ∧ ∀ x, P x → P (nat.succ x))
   λ h, nat.rec h.1 h.2
 
 section notation_test
-#reduce (ℕ')[(@zero 0) /// [] ]
+-- #reduce (ℕ')[(@zero 0) /// [] ]
 
 
-#reduce (L_peano_structure_of_nat)[(p_zero_not_succ)]
+-- #reduce (L_peano_structure_of_nat)[(p_zero_not_succ)]
 
-#reduce (L_peano_structure_of_nat)[(&0 ≃ zero : bounded_formula L_peano 1) ;; ([(1 : ℕ)] : dvector (ℕ') 1)] 
+-- #reduce (L_peano_structure_of_nat)[(&0 ≃ zero : bounded_formula L_peano 1) ;; ([(1 : ℕ)] : dvector (ℕ') 1)] 
 
 -- #reduce (&0 : bounded_term L_peano 1)[zero // 0] -- elaborator fails, don't know why
 -- need to fix subst_bounded_term notation, something's not type-checking
@@ -356,7 +358,7 @@ begin
   intros f hf, cases hf with not_induct induct,
   swap,
   {rcases induct with ⟨induction_schemas, ⟨⟨index, h_eq⟩, ih_right⟩⟩,
-  rw[h_eq] at ih_right, simp[set.range, set.image] at ih_right,
+  rw [←h_eq] at ih_right, simp[set.range, set.image] at ih_right,
   rcases ih_right with ⟨ψ, h_ψ⟩, subst h_ψ, apply PA_standard_model_induction},
   {repeat{cases not_induct}, tidy, contradiction}
 end
