@@ -87,16 +87,14 @@ by {convert ψ, apply zero_add}
 @[simp]lemma bd_alls'_substmax {L} {n} {f : bounded_formula L (n+1)} {t : closed_term L} : (bd_alls' n 1 (f.cast_eq (by simp)))[t /0] = (bd_alls' n 0 (substmax_bounded_formula (f.cast_eq (by simp)) t)) := by {induction n, {tidy}, have := @n_ih (∀' f), simp[bounded_preformula.cast_eq] at *, exact this}
 
 
-set_option pp.notation false
 lemma realize_sentence_bd_alls {L} {n} {f : bounded_formula L n} {S : Structure L} : S ⊨ (bd_alls n f) ↔ (∀ xs : dvector S n, realize_bounded_formula xs f []) :=
 begin
   induction n,
-    {tidy, convert a, apply dvector.zero_eq},
-    {have := @n_ih (∀' f), simp[alls'_alls, alls'_all_commute] at this,
+    {split; dsimp; intros; try{cases xs}; apply a},
+    {have := @n_ih (∀' f), 
      cases this with this_mp this_mpr, split,
-     intros H xs, cases xs, apply this_mp,
-     sorry, --{convert H, tidy},
-     intro H, sorry } -- convert this_mpr (by {intros xs x, exact H (x :: xs)}), tidy
+     {intros H xs, rcases xs with ⟨x,xs⟩, revert xs_xs xs_x, exact this_mp H},
+     {intro H, exact this_mpr (by {intros xs x, exact H (x :: xs)})}}
 end
 
 @[simp] lemma alls_0 {L : Language} (ψ : formula L) : alls 0 ψ = ψ := by refl
