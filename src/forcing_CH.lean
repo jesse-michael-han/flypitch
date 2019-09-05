@@ -1,4 +1,4 @@
-import .bvm_extras .collapse
+import .bvm_extras .collapse .aleph_one
 
 /-
   Forcing the continuum hypothesis.
@@ -28,19 +28,6 @@ local notation `ω` := (bSet.omega)
 
 local attribute [instance, priority 0] classical.prop_decidable
 
-/- For this release, we axiomatize the existence of ℵ₁ and its specification. -/
-
--- there exists a least ordinal not injecting into ω
-axiom aleph_one_exists_axiom {𝔹 : Type*} [nontrivial_complete_boolean_algebra 𝔹] {Γ : 𝔹} : Γ ≤ ⨆x, aleph_one_Ord_spec x
-
--- ℵ₁̌  ⊆ ℵ₁. This is generally true for all nontrivial 𝔹 and cardinals κ.
-axiom aleph_one_check_sub_aleph_one_axiom  {𝔹 : Type*} [nontrivial_complete_boolean_algebra 𝔹] {Γ : 𝔹}
-  : Γ ≤ (pSet.card_ex (aleph 1))̌  ⊆ᴮ classical.some (maximum_principle aleph_one_Ord_spec (by simp))
-
--- ℵ₁ is the successor cardinal of ω
-axiom aleph_one_le_of_omega_lt_axiom {𝔹 : Type*} [nontrivial_complete_boolean_algebra 𝔹] {Γ : 𝔹}
-  : Γ ≤ le_of_omega_lt (classical.some (maximum_principle aleph_one_Ord_spec (by simp)))
-
 section aleph_one
 
 variables {𝔹 : Type*} [nontrivial_complete_boolean_algebra 𝔹]
@@ -58,7 +45,7 @@ begin
 end
 
 lemma aleph_one_check_sub_aleph_one {Γ : 𝔹} : Γ ≤ (pSet.card_ex (aleph 1))̌  ⊆ᴮ aleph_one :=
-aleph_one_check_sub_aleph_one_axiom
+aleph_one_check_sub_aleph_one_axiom_aux aleph_one_satisfies_spec
 
 lemma aleph_one_le_of_omega_lt {Γ : 𝔹} : Γ ≤ le_of_omega_lt (aleph_one) :=
 aleph_one_le_of_omega_lt_axiom

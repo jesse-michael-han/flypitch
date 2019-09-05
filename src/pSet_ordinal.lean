@@ -966,6 +966,8 @@ end
 
 def is_injective_function (x y f : pSet.{u}) : Prop := is_func x y f ∧ is_inj f
 
+def injects_into (x y : pSet.{u}) : Prop := ∃ f, is_injective_function x y f
+
 -- ∃ x, p x ∧ ∀ y, p y → y = x
 
 lemma Set.is_func_iff {x y f : Set.{u}} : (Set.is_func x y f) ↔ (f ⊆ Set.prod x y ∧ ∀ z, z ∈ x → (∃ w, Set.pair z w ∈ f ∧

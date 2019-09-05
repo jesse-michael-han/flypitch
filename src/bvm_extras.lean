@@ -734,6 +734,15 @@ begin
   from le_inf (is_func'_of_is_function ‹_›) ‹_›
 end
 
+lemma check_injects_into {x y : pSet.{u}} (H_inj : pSet.injects_into x y) {Γ : 𝔹} : Γ ≤ bSet.injects_into x̌ y̌ :=
+begin
+  cases H_inj with f H_f_inj, apply bv_use f̌,
+  have : Γ ≤ _ := check_is_injective_function H_f_inj,
+  change _ ≤ _ ⊓ _ at this,
+  refine le_inf _ (bv_and.right ‹_›),
+  from is_func'_of_is_function (bv_and.left ‹_›)
+end
+
 def surjects_onto (x y : bSet 𝔹) : 𝔹 := ⨆f, (is_func' x y f) ⊓ (is_surj x y f)
 
 @[simp]lemma B_ext_larger_than_right {y : bSet 𝔹} : B_ext (λ z, larger_than y z) :=
@@ -2298,8 +2307,12 @@ begin
  from H_right w ‹_› ‹_›}
 end
 
-theorem Ord_of_mem_Ord (y x : bSet 𝔹) : Ord x ⊓ y ∈ᴮ x ≤ Ord y :=
-  le_inf (is_ewo_of_mem_Ord _ _) (is_transitive_of_mem_Ord _ _)
+theorem Ord_of_mem_Ord {x y : bSet 𝔹} {Γ : 𝔹} (H_mem : Γ ≤ x ∈ᴮ y) (H_Ord : Γ ≤ Ord y) : Γ ≤ Ord x :=
+begin
+  refine le_inf _ _,
+    { have := is_ewo_of_mem_Ord x y, exact le_trans (le_inf H_Ord H_mem) ‹_› },
+    { have := is_transitive_of_mem_Ord x y, exact le_trans (le_inf H_Ord H_mem) ‹_› }
+end
 
 open ordinal
 open cardinal
