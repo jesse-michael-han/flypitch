@@ -12,11 +12,12 @@ local infix ` ⟹ `:65 := lattice.imp
 
 local infix ` ⇔ `:50 := lattice.biimp
 
-local infix `≺`:70 := (λ x y, -(larger_than x y))
+local infix `≺`:70 := (λ x y, -(bSet.larger_than x y))
 
-local infix `≼`:70 := (λ x y, injects_into x y)
+local infix `≼`:70 := (λ x y, bSet.injects_into x y)
 
-@[reducible]private noncomputable definition ℵ₁ : pSet := (card_ex $ aleph 1)
+@[reducible]private noncomputable definition ℵ₁ : pSet.{u} := (card_ex $ aleph 1)
+namespace bSet
 
 @[simp]lemma aleph_one_check_exists_mem {𝔹 : Type u} [nontrivial_complete_boolean_algebra 𝔹] {Γ : 𝔹} : Γ ≤ exists_mem ℵ₁̌  :=
 begin
@@ -52,7 +53,12 @@ aleph_one_le_of_omega_lt_axiom
 
 end aleph_one
 
+end bSet
+
+local notation `ω` := (bSet.omega)
+
 section lemmas
+open bSet
 
 variables {𝔹 : Type u} [nontrivial_complete_boolean_algebra 𝔹]
 
@@ -66,7 +72,7 @@ lemma check_forall (x : pSet.{u}) (ϕ : bSet 𝔹 → 𝔹) {h : B_ext ϕ} {b : 
 lemma aleph_one_check_is_aleph_one_of_omega_lt {Γ : 𝔹} (H : Γ ≤ bSet.omega ≺ (ℵ₁)̌ ): Γ ≤ (ℵ₁̌ ) =ᴮ (aleph_one) :=
 begin
   refine subset_ext aleph_one_check_sub_aleph_one _,
-  have := @aleph_one_satisfies_spec _ _ Γ, unfold aleph_one_Ord_spec at this,
+  have := @bSet.aleph_one_satisfies_spec _ _ Γ, unfold bSet.aleph_one_Ord_spec at this,
   bv_split, bv_split_at this_left,
   refine this_right (ℵ₁ ̌) (by simp) _, dsimp at H, rw ←imp_bot at ⊢ H,
   bv_imp_intro H', refine H (larger_than_of_surjects_onto $ surjects_onto_of_injects_into ‹_› $ by simp),
@@ -584,14 +590,14 @@ begin
         suffices this₁ : x̌.func i₁ =ᴮ x̌.func i₂ = ⊥,
           by {exfalso, rw[eq_bot_iff] at this₀, rw[bot_lt_iff_not_le_bot] at H,
               suffices : x̌.func i₁ =ᴮ x̌.func i₂ ≤ ⊥, by contradiction,
-              convert_to (func x (check_cast i₁))̌   =ᴮ (func x (check_cast i₂)) ̌ ≤ ⊥,
+              convert_to (func x (check_cast i₁))̌   =ᴮ (func x (check_cast i₂)) ̌ ≤ ⊥ using 2,
               apply check_func, apply check_func, from ‹_›},
         convert this₀; apply check_func}
 end
 
 lemma aleph_one_inj : (∀ i₁ i₂, ⊥ < (func (ℵ₁̌  : bSet β) i₁) =ᴮ (func (ℵ₁̌  : bSet β) i₂) → i₁ = i₂) :=
 check_index_inj_of_pSet_index_inj $
-  by {intros _ _ H, contrapose H, apply ordinal.mk_inj, from ‹_› }
+  by {intros _ _ H, classical, contrapose H, apply ordinal.mk_inj, from ‹_› }
 
 noncomputable def π : bSet β :=
 rel_of_array (ℵ₁̌  : bSet β) ((powerset omega)̌ ) π_af
@@ -629,7 +635,7 @@ lemma surjection_reflect {Γ : β} (H_bot_lt : ⊥ < Γ) (H_surj : Γ ≤ surjec
 : ∃ (f : pSet.{u}), is_func omega (ordinal.mk (ord (aleph 1))) f
    ∧ is_surj pSet.omega (card_ex $ aleph 1) f :=
 begin
-  by_contra H, simp only [not_exists, not_and_distrib] at H,
+  classical, by_contra H, simp only [not_exists, not_and_distrib] at H,
   suffices this : Γ ≤ ⊥,
     by {rw[bot_lt_iff_not_le_bot] at H_bot_lt, contradiction},
   have := exists_surjection_of_surjects_onto H_surj,
@@ -667,7 +673,8 @@ begin
   /- `tidy_context` says -/ refine poset_yoneda _, intros Γ_1 a, simp only [le_inf_iff] at *, cases a,
   bv_cases_at a_right S HS, apply lattice.context_Or_elim HS,
   intros f Hf, specialize_context Γ_2,
-  simp only [le_inf_iff] at Hf, repeat{auto_cases}, by_contra H,
+  simp only [le_inf_iff] at Hf, repeat{auto_cases},
+  classical, by_contra H,
   replace H := (bot_lt_iff_not_le_bot.mpr H),
   suffices : ∃ f : pSet, is_func pSet.omega (ordinal.mk (aleph 1).ord) f ∧ pSet.is_surj (pSet.omega) (ordinal.mk (aleph 1).ord) f,
     by {exfalso, from ex_no_surj_omega_aleph_one ‹_›},
@@ -680,7 +687,7 @@ lemma aleph_one_check_le_of_omega_lt (Γ : β) : Γ ≤ le_of_omega_lt (ℵ₁̌
 begin
   apply bv_rw' (aleph_one_check_is_aleph_one_of_omega_lt (omega_lt_aleph_one)),
   { simp },
-  { exact aleph_one_le_of_omega_lt }
+  { exact bSet.aleph_one_le_of_omega_lt }
 end
 
 lemma continuum_le_continuum_check {Γ : β} :

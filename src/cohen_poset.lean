@@ -242,9 +242,9 @@ instance size_of_domain_0_subsingleton : subsingleton $ @size_of_domain η ⁻¹
 begin
   refine ⟨λ a b, _⟩, rcases a with ⟨⟨p_a, H_f_a⟩, H_a⟩, rcases b with ⟨⟨p_b, H_f_b⟩, H_b⟩, congr,
   have := (pfun.graph_empty_iff_dom_empty _).mpr (@empty_of_size_of_domain_0 η _
-                                          (by {simp[set.mem_preimage_eq] at H_b, exact H_b})),
+                                          (by {simp[set.mem_preimage] at H_b, exact H_b})),
   have := (pfun.graph_empty_iff_dom_empty _).mpr (@empty_of_size_of_domain_0 η _
-                                          (by {simp[set.mem_preimage_eq] at H_a, exact H_a})),
+                                          (by {simp[set.mem_preimage] at H_a, exact H_a})),
   exact pfun.ext_graph _ _ (by cc)
 end
 

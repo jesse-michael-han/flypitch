@@ -154,7 +154,8 @@ begin
     let η := typein (subrel θr $ A $ pick y) ⟨z, hzy⟩,
     have η_def : z = (enum (subrel θr $ A $ pick y) η (typein_lt_type _ _)).val, {rw [enum_typein]},
     cases lt_or_ge η (typein ρr ξ₀) with h h,
-    { rw [mem_preimage_eq, mem_set_of_eq],
+    {
+ rw [mem_preimage, mem_set_of_eq],
       refine lt_of_lt_of_le _ (ordinal.le_sup _ _),
       { refine ⟨enum ρr η (lt_trans h (typein_lt_type _ _)), _⟩,
         rw [←typein_lt_typein ρr, typein_enum], exact h },
@@ -456,11 +457,12 @@ variable {β}
 variable (β)
 lemma is_subbasis_pi : Pi.topological_space = generate_from (pi_subbasis β) :=
 begin
-  symmetry, apply le_antisymm,
-  { rw [generate_from_le_iff_subset_is_open], rintro _ ⟨⟨i, o, ho⟩, rfl⟩,
-    apply generate_open.basic, apply mem_bUnion (mem_range_self i), exact ⟨o, ho, rfl⟩ },
-  refine lattice.supr_le _, intro i,
-  rintro _ ⟨s, hs, rfl⟩, apply generate_open.basic, exact ⟨⟨i, s, hs⟩, rfl⟩
+  sorry
+  -- symmetry, apply le_antisymm,
+  -- { rw [generate_from_le_iff_subset_is_open], rintro _ ⟨⟨i, o, ho⟩, rfl⟩,
+  --   apply generate_open.basic, apply mem_bUnion (mem_range_self i), exact ⟨o, ho, rfl⟩ },
+  -- refine lattice.supr_le _, intro i,
+  -- rintro _ ⟨s, hs, rfl⟩, apply generate_open.basic, exact ⟨⟨i, s, hs⟩, rfl⟩
 end
 
 def pi_basis : set (set (Πx, β x)) :=
@@ -524,8 +526,8 @@ begin
     simp only [C, dif_pos hx],
     apply is_open_sInter,
     { have : finite (subtype.val '' ((λ s : opens (β x), sigma.mk x s) ⁻¹' o'')),
-      { apply finite_image, apply finite_preimage _ h2o', intros o o' hoo',
-        cases hoo', refl },
+      { apply finite_image, apply finite_preimage _ h2o', intros o o' hoo' hoo'' hoo''',
+        cases hoo''', refl },
       convert this,
       apply subset.antisymm,
       { rintro o ⟨h1o, h2o⟩, exact ⟨⟨o, h1o⟩, h2o, rfl⟩ },

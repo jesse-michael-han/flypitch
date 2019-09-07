@@ -357,7 +357,7 @@ begin
        from bv_trans ‹_› ‹_›},
 
      apply le_trans, show 𝔹, from a ⊓ b,
-       by {ac_change' (bval v i ⊓ bval w j) ⊓ (a ⊓ b) ≤ a ⊓ b, from inf_le_right},
+       by {ac_change (bval v i ⊓ bval w j) ⊓ (a ⊓ b) ≤ a ⊓ b, from inf_le_right},
      from bv_trans ‹_› ‹_›}
 end
 
