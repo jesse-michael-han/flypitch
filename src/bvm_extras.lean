@@ -1957,51 +1957,6 @@ parameters {𝔹 : Type u} [nontrivial_complete_boolean_algebra 𝔹]
 parameter (x : bSet 𝔹)
 
 local notation `fx2` := functions x 𝟚
-/- The function from 2^x to P(x) -/
--- def set_of_indicator (x : bSet 𝔹) : bSet 𝔹 :=
--- begin
---   refine subset.mk (_ : (functions x 𝟚).type → 𝔹),
---   dsimp [functions, bv_powerset], intro f,
--- end
-
-/- I am working on the injection P(ω) ↪ 2 ^ ω ↪ (2 ^ ω) ✓ ↪ P(ω) ✓ -/
-
--- def indicator_of_set' (x : bSet 𝔹) : bSet 𝔹 :=
--- subset.mk (λ sχ, ⨅(a : type x), sχ.2 (a, option.none) ⇔ sχ.1 a : ((bv_powerset x).prod (functions x 𝟚)).type → 𝔹)
-
--- lemma is_func'_indicator_of_set' {Γ : 𝔹} (x : bSet 𝔹) :
---   Γ ≤ is_func' (bv_powerset x) (functions x 𝟚) (indicator_of_set' x) :=
--- begin
---   apply bv_and_intro,
---   { bv_intro s₁, bv_intro s₂, bv_intro χ₁, bv_intro χ₂, bv_imp_intro h₁, bv_imp_intro h₂,
---     bv_split_at h₁,
---     apply subset_ext,
---     { rw [subset_unfold'], bv_intro y, bv_imp_intro hy,
---       rw [indicator_of_set', mem_subset.mk_iff] at h₁_left h₁_right,
---       bv_cases_at h₁_left sχ h₃, clear h₁_left, cases sχ with s χ, bv_split_at h₃,
---       dsimp at h₃_left, sorry
---       -- dsimp at *,
---       -- have := eq_of_is_func'_of_eq,
---       },
---     {sorry }},
---   { sorry }
--- end
-
--- lemma is_inj_indicator_of_set' {Γ : 𝔹} (x : bSet 𝔹) : Γ ≤ is_inj (indicator_of_set' x) :=
--- begin
---   sorry
--- end
-
--- def indicator_of_set (Γ : 𝔹) (x : bSet 𝔹) : bSet 𝔹 :=
--- function_of_func' $ (is_func'_indicator_of_set' x : Γ ≤ _)
-
--- lemma is_function_indicator_of_set {Γ : 𝔹} (x : bSet 𝔹) :
---   Γ ≤ is_function (bv_powerset x) (functions x 𝟚) (indicator_of_set Γ x) :=
--- function_of_func'_is_function _
-
--- lemma is_inj_indicator_of_set {Γ : 𝔹} (x : bSet 𝔹) :
---   Γ ≤ is_inj (indicator_of_set Γ x) :=
--- function_of_func'_inj_of_inj $ is_inj_indicator_of_set' x --todo: function_of_func'_inj_of_inj
 
 def powerset_injects.F : (bv_powerset x).type → (functions x 𝟚).type :=
 λ χ, λ pr, ((x.func pr.1 ∈ᴮ set_of_indicator χ ⊓ (𝟚.func (pr.2) =ᴮ 0)) ⊔ ((x.func pr.1) ∈ᴮ (subset.mk (λ i, - ((x.func i) ∈ᴮ set_of_indicator χ))) ⊓ (𝟚.func (pr.2) =ᴮ 1)))

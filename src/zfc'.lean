@@ -472,7 +472,7 @@ open pSet cardinal
 section CH_unprovable
 
 
-lemma neg_CH_f : ⊤ ⊩[V 𝔹_cohen] ∼CH_f :=
+lemma V_𝔹_cohen_models_neg_CH : ⊤ ⊩[V 𝔹_cohen] ∼CH_f :=
 begin
   rw neg_CH_f_sound, from neg_CH
 end
@@ -480,7 +480,7 @@ end
 instance V_𝔹_nonempty : nonempty (V 𝔹_cohen) := ⟨bSet.empty⟩
 
 theorem CH_f_unprovable : ¬ (ZFC' ⊢' CH_f) :=
-unprovable_of_model_neg _ (bSet_models_ZFC' _) (nontrivial.bot_lt_top) neg_CH_f
+unprovable_of_model_neg _ (bSet_models_ZFC' _) (nontrivial.bot_lt_top) V_𝔹_cohen_models_neg_CH
 
 end CH_unprovable
 

@@ -53,7 +53,9 @@ end
 end pSet
 open lattice bSet cardinal
 namespace bSet
+
 section
+
 variables {𝔹 : Type u} [nontrivial_complete_boolean_algebra 𝔹]
 
 local notation `ℵ₁` := pSet.aleph_one
@@ -77,13 +79,19 @@ begin
   by simp
 end
 
-lemma mem_aleph_one_of_injects_into_omega {x : bSet 𝔹} {Γ : 𝔹} (H_aleph_one : Γ ≤ aleph_one_Ord_spec x) {z : bSet 𝔹} (H_z_Ord : Γ ≤ Ord z) (H_inj : Γ ≤ injects_into z bSet.omega) : Γ ≤ z ∈ᴮ x := sorry
+lemma mem_aleph_one_of_injects_into_omega {x : bSet 𝔹} {Γ : 𝔹} (H_aleph_one : Γ ≤ aleph_one_Ord_spec x) {z : bSet 𝔹} (H_z_Ord : Γ ≤ Ord z) (H_inj : Γ ≤ injects_into z bSet.omega) : Γ ≤ z ∈ᴮ x :=
+begin
+  sorry
+-- suppose that z ∉ x. then by trichotomy, z = x or x ∈ z.
+-- if z = x, then x injects into z, which is bad, so we need to additionally add a clause which says that aleph_one itself does not inject into omega.
+-- if x ∈ z, then x ⊆ z, which again means that x injects into omega (via injects_into trans and le_of_subset)
+end
 
 lemma aleph_one_check_sub_aleph_one_axiom_aux {x : bSet 𝔹} {Γ : 𝔹} (H_aleph_one : Γ ≤ aleph_one_Ord_spec x) : Γ ≤ ℵ₁̌ ⊆ᴮ x :=
 begin
   rw subset_unfold', bv_intro w, bv_imp_intro H_mem_w,
   apply mem_aleph_one_of_injects_into_omega, from ‹_›,
-  refine Ord_of_mem_Ord H_mem_w
+  exact Ord_of_mem_Ord H_mem_w
     (check_Ord (by {unfold pSet.aleph_one pSet.card_ex, simp })),
   exact injects_into_omega_of_mem_aleph_one_check ‹_›
 end

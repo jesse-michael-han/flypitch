@@ -773,6 +773,9 @@ by bv_cc -- :^)
 example {x₁ y₁ x₂ y₂ : bSet 𝔹} {Γ} (H₁ : Γ ≤ x₁ ∈ᴮ y₁) (H₂ : Γ ≤ x₁ =ᴮ x₂) (H₂ : Γ ≤ y₁ =ᴮ y₂) : Γ ≤ x₂ ∈ᴮ y₂ :=
 by bv_cc -- :^)
 
+example {a b c d e : bSet 𝔹} : (a =ᴮ b) ⊓ (b =ᴮ c) ⊓ (c =ᴮ d) ⊓ (d =ᴮ e) ≤ a =ᴮ e :=
+by tidy_context; bv_cc
+
 def is_definite (u : bSet 𝔹) : Prop := ∀ i : u.type, u.bval i = ⊤
 
 lemma eq_empty {u : bSet 𝔹} : u =ᴮ ∅ = -⨆i, u.bval i :=
